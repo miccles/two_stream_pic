@@ -1,5 +1,5 @@
 import numpy as np
-
+from functions import *
 
 dt = 0.005  # time step
 Nt = 40  # number of time steps (set to -1 for no loops)

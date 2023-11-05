@@ -9,8 +9,9 @@ def b0(x):
 
 
 def b1(x):
-    if -1 <= x <= 1:
-        return -np.abs(x) + 1
+    x = np.abs(x)
+    if x <= 1:
+        return -x + 1
     else:
         return 0
 
@@ -31,7 +32,7 @@ def rhoavg(xp, xg, q, dx):
                 rho[i] += (q / dx) * b1((xg[i] - (xp[p] - L)) / dx)
             elif 0 <= xp[p] <= xg[0] and i == ng - 1:
                 rho[i] += (q / dx) * b1((xg[i] - (xp[p] + L)) / dx)
-    rho [ng] = rho[0]
+    rho[ng] = rho[0]
     return rho
 
 
