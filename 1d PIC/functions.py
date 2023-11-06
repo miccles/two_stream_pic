@@ -15,7 +15,7 @@ def b1(x):
     else:
         return 0
 
-
+## fix, maybe i + 1 / 2 instead of i? For the cell centers
 def xgrid(ng, L):
     dx = L / ng
     x = [i * dx for i in range(ng + 1)]
