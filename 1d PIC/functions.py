@@ -37,15 +37,18 @@ def rhoavg(xp, xg, q, dx):
 
 
 def phifunc(d, ng):
-    tempd = [de for de in d] ### sth to fix here, phi should start and end at 0
+    tempd = [de for de in d]
     a = [1] * ng
     b = [-2] * ng
     c = [1] * ng
-    b[0], b[ng-1] = 1, 1
     a[0] = 0
+    a[ng - 1] = 0
+    b[0] = 1
+    b[ng - 1] = 1
+    c[0] = 0
     c[ng - 1] = 0
     c[0] = c[0] / b[0]
-    tempd[0] = tempd[0] / b[0]
+    tempd[0] = d[0] / b[0]
     for i in range(1, ng):
         c[i] = c[i] / (b[i] - a[i] * c[i - 1])
         tempd[i] = (tempd[i] - a[i] * tempd[i - 1]) / (b[i] - a[i] * c[i - 1])

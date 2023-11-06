@@ -82,6 +82,7 @@ def phifunc(d, ng):
     return x
 
 
+
 def efavg(phi, ng, dx):
     el = [0] * (ng + 1)
     el[0] = -(phi[1] - phi[-1]) / (2 * dx)
