@@ -67,7 +67,7 @@ def efavg(phi, ng, dx):
         el[i] = -(phi[i + 1] - phi[i - 1]) / (2 * dx)
     return el
 
-
+## fix
 def efparticle(xp, xg, dx, elgrid):
     global L, N, ng
     efp = [0] * N
