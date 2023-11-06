@@ -21,7 +21,7 @@ def xgrid(ng, L):
     x = [i * dx for i in range(ng + 1)]
     return x
 
-
+##fix
 def rhoavg(xp, xg, q, dx):
     global L, ng
     rho = [0] * (ng + 1)
@@ -37,34 +37,30 @@ def rhoavg(xp, xg, q, dx):
 
 
 def phifunc(d, ng):
-    tempd = [de for de in d]
-    a = [1] * (ng + 1)
-    b = [-2] * (ng + 1)
-    c = [1] * (ng + 1)
-    b[0] = 1
-    b[ng] = 1
+    tempd = [de for de in d] ### sth to fix here, phi should start and end at 0
+    a = [1] * ng
+    b = [-2] * ng
+    c = [1] * ng
+    b[0], b[ng-1] = 1, 1
     a[0] = 0
-    a[ng] = 0
-    c[0] = 0
-    c[ng] = 0
+    c[ng - 1] = 0
     c[0] = c[0] / b[0]
     tempd[0] = tempd[0] / b[0]
     for i in range(1, ng):
         c[i] = c[i] / (b[i] - a[i] * c[i - 1])
         tempd[i] = (tempd[i] - a[i] * tempd[i - 1]) / (b[i] - a[i] * c[i - 1])
-    tempd[ng] = (tempd[ng] - a[ng] * tempd[ng - 1]) / (b[ng] - a[ng] * c[ng - 1])
-    x = [0] * (ng + 1)
-    x[ng] = tempd[ng]
-    for i in range(ng - 1, -1, -1):
+    x = [0] * ng
+    x[ng - 1] = tempd[ng - 1]
+    for i in range(ng - 2, -1, -1):
         x[i] = tempd[i] - c[i] * x[i + 1]
     return x
 
 
 def efavg(phi, ng, dx):
-    el = [0] * (ng + 1)
-    el[0] = -(phi[1] - phi[0]) / (1 * dx)
-    el[ng] = -(phi[ng] - phi[ng - 1]) / (1 * dx)
-    for i in range(1, ng):
+    el = [0] * ng
+    el[0] = -(phi[1] - phi[-1]) / (1 * dx)
+    el[ng - 1] = -(phi[0] - phi[ng - 2]) / (1 * dx)
+    for i in range(1, ng - 1):
         el[i] = -(phi[i + 1] - phi[i - 1]) / (2 * dx)
     return el
 
