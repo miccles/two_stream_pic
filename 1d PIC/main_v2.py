@@ -17,7 +17,7 @@ Nt = 12                             # number of time steps (set to -1 for no loo
 tfinal = Nt * dt                    # total time
 tex = 10                            # time interval for data export
 
-ng = 64                             # number of grid boxes
+ng = 64                            # number of grid boxes
 L = 2 * np.pi                       # domain length in dx units
 dx = L / ng                         # dimensionless size of grid boxes (=1 in our units)
 

@@ -55,10 +55,10 @@ def main():
     """ Plasma PIC simulation """
 
     # Simulation parameters
-    N = 40000  # Number of particles
+    N = 60000  # Number of particles
     Nx = 400  # Number of mesh cells
     t = 0  # current time of the simulation
-    tEnd = 100  # time at which simulation ends
+    tEnd = 150  # time at which simulation ends
     dt = 1  # timestep
     boxsize = 50  # periodic domain [0,boxsize]
     n0 = 1  # electron number density

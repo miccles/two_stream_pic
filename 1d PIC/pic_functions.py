@@ -45,7 +45,6 @@ def xgrid(ng, L):
 
 
 def rhoavg(xp, xg, q, dx):
-    global L, ng
     rho = [0] * (ng + 1)
     for i in range(ng):
         for p in range(len(xp)):
