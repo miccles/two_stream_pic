@@ -32,7 +32,7 @@ def rhoavg(xp, xg, ng, L, q):
                 rho[i] += (q / dx) * b1((xg[i] - (xp[p] - L)) / dx)
             elif 0 <= xp[p] <= xg[0] and i == ng - 1:
                 rho[i] += (q / dx) * b1((xg[i] - (xp[p] + L)) / dx)
-    rho[ng] = rho[0]
+    rho[ng - 1] = rho[0]
     return rho
 
 
@@ -71,16 +71,11 @@ def efavg(phi, ng, dx):
 def efparticle(xp, xg, dx, elgrid, N):
     efp = [0] * N
     for p in range(N):
-        # if 0 <= xp[p] <= dx / 2:
-        #     efp[p] = elgrid[0] * b1((xg[0] - xp[p]) / dx) #+ elgrid[-1] * b1((xg[-1] - xp[p]) / dx)
-        # elif L - dx / 2 <= xp[p] <= L:
-        #     efp[p] = elgrid[ng - 1] * b1((xg[ng - 1] - xp[p]) / dx)
-        # else:
-            try:
-                for i in range(int(np.ceil(xp[p] / dx - 1)), int(np.floor(xp[p] / dx + 1) + 1)):
-                    efp[p] += elgrid[i] * b1((xg[i] - xp[p]) / dx)
-            except IndexError:
-                print("Index Error for i=", i)
+        try:
+            for i in range(int(np.ceil(xp[p] / dx - 3 / 2)), int(np.floor(xp[p] / dx + 1 / 2) + 1)):
+                efp[p] += elgrid[i] * b1((xg[i] - xp[p]) / dx)
+        except IndexError:
+            print("Index Error for i=", i)
     return efp
 
 
@@ -112,28 +107,6 @@ def bcp(xp, L):
 # save_results_image = 'C:/Users/micha/Desktop/PIC_Plots/images'
 # save_results_gif = 'C:/Users/micha/Desktop/PIC_Plots/gifs'
 
-
-# # First attempt on a 1D PIC simulation for two-stream instability
-
-
-# def b0(x):
-#     if np.abs(x) <= 1 / 2:
-#         return 1
-#     else:
-#         return 0
-
-
-# def b1(x):
-#     if -1 <= x <= 1:
-#         return -np.abs(x) + 1
-#     else:
-#         return 0
-
-
-# def xgrid(ng, L):
-#     dx = L / ng
-#     x = [i * dx for i in range(ng + 1)]
-#     return x
 
 
 # def rhoavg(xp, xg, q, dx):

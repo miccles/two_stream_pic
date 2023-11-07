@@ -36,18 +36,13 @@ def getAcc(pos, Nx, boxsize, n0, Gmtx, Lmtx):
     n = np.bincount(j[:, 0], weights=weight_j[:, 0], minlength=Nx);
     n += np.bincount(jp1[:, 0], weights=weight_jp1[:, 0], minlength=Nx);
     n *= n0 * boxsize / N / dx
-
     # Solve Poisson's Equation: laplacian(phi) = n-n0
     phi_grid = spsolve(Lmtx, n - n0, permc_spec="MMD_AT_PLUS_A")
-
     # Apply Derivative to get the Electric field
     E_grid = - Gmtx @ phi_grid
-
     # Interpolate grid value onto particle locations
     E = weight_j * E_grid[j] + weight_jp1 * E_grid[jp1]
-
     a = -E
-
     return a
 
 

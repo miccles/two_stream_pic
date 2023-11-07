@@ -9,7 +9,7 @@ import math
 
 
 dt = 0.05                           # time step
-Nt = 10                             # number of time steps (set to -1 for no loops)
+Nt = 0                              # number of time steps (set to -1 for no loops)
 tfinal = Nt * dt                    # total time
 tex = -1                            # step interval for data export
 
@@ -42,67 +42,84 @@ xi = xgrid(ng, L)
 vp = v0 * np.random.normal(1, 1, N)
 vp = [(vp[i] + vd) * (-1) ** i for i in range(len(vp))]
 
+
 # Boundary Conditions of field #
 phiL = 0
 phiR = 0
 
-# Initial Rho and d matrices (Before the perturbation)#
+# Initial Rho and d matrices (Before the perturbation) #
 rho = rhoavg(xp, xi, ng, L, qp)
 d = [-r for r in rho]
-# Phi vector#
-phi = phifunc(d, ng)
-# Ei vector #
-eli = efavg(phi, ng, dx)  # Electric field at the center of cells
-# Ep vector #
-elp = efparticle(xp, xi, dx, eli)
+phi = phifunc(d, ng)                    # Cell averaged scalar potential
+eli = efavg(phi, ng, dx)                # Electric field at the center of cells
+elp = efparticle(xp, xi, dx, eli, N)       # Electric field of particles
 
 # perturbation#
 vp = [vp[i] + vp1 * np.sin(2 * np.pi * xp[i] * mode / L) for i in range(len(xp))]
 xp = [xp[i] + xp1 * np.sin(2 * np.pi * xp[i] * mode / L) for i in range(len(xp))]
 
-
-# Calculation of rhoavg, phiavg, Ei and Ep after perturbation#
 fig = plt.figure(figsize=(5, 4), dpi=80)
-t = 0
-for i in range(Nt):
-    # Half push of vp #
-    vp = vpup(vp, elp, dt / 2., qm)
-
-    # Half push of vp #
-    vp = vpup(vp, elp, dt / 2., qm)
-    t += dt
-
-# Main Computational Cycle #
-if Nt >= 0:
-    # Evolving v to dt/2 once#
-    vp = vpup(vp, dt / 2, qm, elp)
-    for i in range(Nt + 1):
-        # Position Update & BCs#
-        xp = bcp(xpup(xp, vp, dt), L)
-        # Rho and d vectors
-        rho = rhoavg(xp, xi, qp, dx)
-        d = [-4 * np.pi * r for r in rho]
-        # Phi vector#
-        phi = phifunc(d, ng)
-        # Ei vector #
-        eli = efavg(phi, ng, dx)  # Electric field at the center of cells
-        # Ep vector #
-        elp = efparticle(xp, xi, dx, eli)
-        #Velocity update#
-        vp = vpup(vp, dt, qm, elp)
-        #plt.scatter([xp[2 * i] for i in range(int(N / 2))], [vp[2 * i] for i in range(int(N / 2))])
-        #plt.scatter([xp[2 * i + 1] for i in range(int(N / 2))], [vp[2 * i + 1] for i in range(int(N / 2))])
-        #plt.show()
-    # Final evolution of vp by -dt/2 once#
-    vp = vpup(vp, -dt / 2, qm, elp)
-
-#Plotting#
+plt.cla()
 plt.scatter([xp[2*i] for i in range(int(N/2))], [vp[2*i] for i in range(int(N/2))])
 plt.scatter([xp[2*i + 1] for i in range(int(N/2))], [vp[2*i + 1] for i in range(int(N/2))])
+plt.axis([0, L, -3, 3])
+plt.pause(0.001)
+
+
+# Calculation of rhoavg, phiavg, Ei and Ep after perturbation#
+
+t = 0
+for i in range(Nt):
+    vp = vpup(vp, elp, dt / 2., qm)  # Half push of vp
+    xp = bcp(xpup(xp, vp, dt), L)    # Push of xp + BCs
+    rho = rhoavg(xp, xi, ng, L, qp)
+    d = [- r for r in rho]
+    phi = phifunc(d, ng)
+    eli = efavg(phi, ng, dx)
+    elp = efparticle(xp, xi, dx, eli, N)
+    vp = vpup(vp, elp, dt / 2., qm)  # Half push of vp
+    t += dt
+    # Plotting #
+    plt.cla()
+    plt.scatter([xp[2*i] for i in range(int(N/2))], [vp[2*i] for i in range(int(N/2))])
+    plt.scatter([xp[2*i + 1] for i in range(int(N/2))], [vp[2*i + 1] for i in range(int(N/2))])
+    plt.axis([0, L, -3, 3])
+    plt.pause(0.001)
+plt.xlabel('x')
+plt.ylabel('v')
 plt.show()
 
-plt.scatter(xi, phi)
-plt.show()
+# # Main Computational Cycle #
+# if Nt >= 0:
+#     # Evolving v to dt/2 once#
+#     vp = vpup(vp, dt / 2, qm, elp)
+#     for i in range(Nt + 1):
+#         # Position Update & BCs#
+#         xp = bcp(xpup(xp, vp, dt), L)
+#         # Rho and d vectors
+#         rho = rhoavg(xp, xi, qp, dx)
+#         d = [-4 * np.pi * r for r in rho]
+#         # Phi vector#
+#         phi = phifunc(d, ng)
+#         # Ei vector #
+#         eli = efavg(phi, ng, dx)  # Electric field at the center of cells
+#         # Ep vector #
+#         elp = efparticle(xp, xi, dx, eli)
+#         #Velocity update#
+#         vp = vpup(vp, dt, qm, elp)
+#         #plt.scatter([xp[2 * i] for i in range(int(N / 2))], [vp[2 * i] for i in range(int(N / 2))])
+#         #plt.scatter([xp[2 * i + 1] for i in range(int(N / 2))], [vp[2 * i + 1] for i in range(int(N / 2))])
+#         #plt.show()
+#     # Final evolution of vp by -dt/2 once#
+#     vp = vpup(vp, -dt / 2, qm, elp)
+
+# #Plotting#
+# plt.scatter([xp[2*i] for i in range(int(N/2))], [vp[2*i] for i in range(int(N/2))])
+# plt.scatter([xp[2*i + 1] for i in range(int(N/2))], [vp[2*i + 1] for i in range(int(N/2))])
+# plt.show()
+
+# plt.scatter(xi, phi)
+# plt.show()
 
 
 # def rhoavg(xp, xg, q, dx):
