@@ -89,7 +89,7 @@ def xpup(xp, vp, dt):
     return newpos
 
 
-def vpup(vp, dt, qm, Ep):
+def vpup(vp, Ep, dt, qm):
     newvel = [vp[i] + qm * dt * Ep[i] for i in range(len(vp))]
     return newvel
 
