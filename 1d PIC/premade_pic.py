@@ -50,15 +50,15 @@ def main():
     """ Plasma PIC simulation """
 
     # Simulation parameters
-    N = 70000  # Number of particles
+    N = 100000  # Number of particles
     Nx = 1000  # Number of mesh cells
     t = 0  # current time of the simulation
-    tEnd = 200  # time at which simulation ends
+    tEnd = 500  # time at which simulation ends
     dt = 1  # timestep
     boxsize = 50  # periodic domain [0,boxsize]
     n0 = 1  # electron number density
-    vb = 3  # beam velocity
-    vth = 1  # beam width
+    vb = 1  # beam velocity
+    vth = 0.1  # beam width
     A = 0.01  # perturbation
     plotRealTime = True  # switch on for plotting as the simulation goes along
 
@@ -77,7 +77,7 @@ def main():
     e = np.ones(Nx)
     diags = np.array([-1, 1])
     vals = np.vstack((-e, e))
-    Gmtx = sp.spdiags(vals, diags, Nx, Nx);
+    Gmtx = sp.spdiags(vals, diags, Nx, Nx)
     Gmtx = sp.lil_matrix(Gmtx)
     Gmtx[0, Nx - 1] = -1
     Gmtx[Nx - 1, 0] = 1
