@@ -51,10 +51,10 @@ def main():
 
     # Simulation parameters
     N = 100000  # Number of particles
-    Nx = 1000  # Number of mesh cells
+    Nx = 500  # Number of mesh cells
     t = 0  # current time of the simulation
-    tEnd = 500  # time at which simulation ends
-    dt = 1  # timestep
+    tEnd = 100  # time at which simulation ends
+    dt = 0.5  # timestep
     boxsize = 50  # periodic domain [0,boxsize]
     n0 = 1  # electron number density
     vb = 1  # beam velocity
@@ -87,7 +87,7 @@ def main():
     # Construct matrix L to computer Laplacian (2nd derivative)
     diags = np.array([-1, 0, 1])
     vals = np.vstack((e, -2 * e, e))
-    Lmtx = sp.spdiags(vals, diags, Nx, Nx);
+    Lmtx = sp.spdiags(vals, diags, Nx, Nx)
     Lmtx = sp.lil_matrix(Lmtx)
     Lmtx[0, Nx - 1] = 1
     Lmtx[Nx - 1, 0] = 1
@@ -126,7 +126,8 @@ def main():
             plt.cla()
             plt.scatter(pos[0:Nh], vel[0:Nh], s=.4, color='blue', alpha=0.5)
             plt.scatter(pos[Nh:], vel[Nh:], s=.4, color='red', alpha=0.5)
-            plt.axis([0, boxsize, -6, 6])
+            plt.axis([0, boxsize, -3 * vb, 3 * vb])
+            #plt.title(f'Timestep={i}')
             plt.pause(0.001)
 
     # Save figure
