@@ -53,8 +53,8 @@ def main():
     N = 100000  # Number of particles
     Nx = 500  # Number of mesh cells
     t = 0  # current time of the simulation
-    tEnd = 100  # time at which simulation ends
-    dt = 0.5  # timestep
+    tEnd = 50  # time at which simulation ends
+    dt = 0.05  # timestep
     boxsize = 50  # periodic domain [0,boxsize]
     n0 = 1  # electron number density
     vb = 1  # beam velocity
