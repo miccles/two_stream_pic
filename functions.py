@@ -27,7 +27,6 @@ def rho_avg(dx, Nx, part_pos, qp):
     Lx = Nx * dx
     dens_avg = [0] * Nx
     cell_pos = [grid_pos(i, dx) for i in range(Nx)]
-    print(cell_pos)
     for i in range(len(cell_pos)):
         for p in range(len(part_pos)):
                 if i == 0 and part_pos[p] >= cell_pos[Nx - 1]:
@@ -36,3 +35,5 @@ def rho_avg(dx, Nx, part_pos, qp):
                     dens_avg[i] += qp * b1((cell_pos[i] - (part_pos[p] + Lx)) / dx)
                 dens_avg[i] += qp * b1((cell_pos[i] - part_pos[p]) / dx)
     return dens_avg
+
+
