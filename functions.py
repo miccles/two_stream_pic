@@ -62,6 +62,11 @@ def phi_tridiag_solver(d):
     return x
 
 
+# electric field solver #
+def el_cell(phi, dx):
+    return np.gradient(phi, dx)
+
+
 
 
 
