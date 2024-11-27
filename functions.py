@@ -39,20 +39,22 @@ def rho_avg(dx, Nx, part_pos, qp):
 
 
 # potential solver #
-def phi_tridiag_solver(d):
+def phi_tridiag_solver(d): # Tridiagonal algorithm for non-periodic boundary conditions
     Nx = len(d)
+
     a = [1] * Nx
-    b = [-2] * Nx
-    c = [1] * Nx
     a[0] = 0
     a[Nx - 1] = 0
-    b[0] = 1
-    b[Nx - 1] = 1
+
+    b = [-2] * Nx
+    b[0] = 1        # Dirichlet boundary conditions
+    b[Nx - 1] = 1   # Dirichlet boundary conditions
+
+    c = [1] * Nx
     c[0] = 0
     c[Nx - 1] = 0
-    c[0] = c[0] / b[0]
-    d[0] = d[0] / b[0]
-    for i in range(1, Nx):
+
+    for i in range(0, Nx):
         c[i] = c[i] / (b[i] - a[i] * c[i - 1])
         d[i] = (d[i] - a[i] * d[i - 1]) / (b[i] - a[i] * c[i - 1])
     x = [0] * Nx
@@ -60,6 +62,7 @@ def phi_tridiag_solver(d):
     for i in range(Nx - 2, -1, -1):
         x[i] = d[i] - c[i] * x[i + 1]
     return x
+
 
 
 # electric field solver #
