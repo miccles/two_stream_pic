@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.sparse as sp
+import scipy.sparse.linalg as spla
 
 from parameters import *
 
@@ -39,8 +40,33 @@ def rho_avg(dx, Nx, part_pos, qp):
     return dens_avg
 
 
-# potential solver #
-def phi_tridiag_solver(d): # Tridiagonal algorithm for non-periodic boundary conditions
+
+def laplacian_matrix(Nx):
+    e = np.ones(Nx)
+    diags = np.array([-1,0,1])
+    vals  = np.vstack((e,-2*e,e))
+    Lap = sp.spdiags(vals, diags, Nx, Nx)
+    Lap = sp.lil_matrix(Lap) # tranform mtx type to modify entries
+    Lap[0,Nx-1] = 1 # periodic boundary conditions
+    Lap[Nx-1,0] = 1 # periodic boundary conditions
+    Lap = sp.csr_matrix(Lap) # transform mtx type
+    return Lap
+
+
+def gradient_matrix(Nx):
+    e = np.ones(Nx)
+    diags = np.array([-1,1])
+    vals  = np.vstack((-e,e))
+    Grad = sp.spdiags(vals, diags, Nx, Nx)
+    Grad = sp.lil_matrix(Grad) # tranform mtx type to modify entries
+    Grad[0,Nx-1] = -1 # periodic boundary conditions
+    Grad[Nx-1,0] = 1 # periodic boundary conditions
+    Grad = sp.csr_matrix(Grad) # transform mtx type
+    return Grad
+
+
+# potential solver - Tridiagonal algorithm for non-periodic boundary conditions (phiL, phiR are known) #
+def phi_tridiag_solver(d):
     Nx = len(d)
 
     a = [1] * Nx
@@ -65,34 +91,19 @@ def phi_tridiag_solver(d): # Tridiagonal algorithm for non-periodic boundary con
     return x
 
 
+# potential solver - sparse matrix solver for periodic boundary conditions #
 
-def laplacian_matrix(Nx):
-    e = np.ones(Nx)
-    diags = np.array([-1,0,1])
-    vals  = np.vstack((e,-2*e,e))
-    Lmtx = sp.spdiags(vals, diags, Nx, Nx)
-    Lmtx = sp.lil_matrix(Lmtx) # tranform mtx type to modify entries
-    Lmtx[0,Nx-1] = 1 # periodic boundary conditions
-    Lmtx[Nx-1,0] = 1 # periodic boundary conditions
-    Lmtx = sp.csr_matrix(Lmtx) # transform mtx type
-    return Lmtx
+def phi_sparse_solver(L, d):
+    phi = spla.spsolve(L, d)
+    return phi
 
 
-def gradient_matrix(Nx):
-    e = np.ones(Nx)
-    diags = np.array([-1,1])
-    vals  = np.vstack((-e,e))
-    Gmtx = sp.spdiags(vals, diags, Nx, Nx)
-    Gmtx = sp.lil_matrix(Gmtx) # tranform mtx type to modify entries
-    Gmtx[0,Nx-1] = -1 # periodic boundary conditions
-    Gmtx[Nx-1,0] = 1 # periodic boundary conditions
-    Gmtx = sp.csr_matrix(Gmtx) # transform mtx type
-    return Gmtx
+# electric field solver - using the gradient matrix G #
+def el_solver(G, phi, dx):
+    electric_field = -G.dot(phi) / (2 * dx)
+    return electric_field
 
 
-# electric field solver #
-def el_cell(phi, dx):
-    return np.gradient(phi, dx)
 
 
 
