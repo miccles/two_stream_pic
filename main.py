@@ -3,12 +3,7 @@ from functions import *
 from parameters import *
 
 
-Nx = 100
-ppc = 10
-Np = Nx * ppc
-dx = 0.01
-dx0 = 10 ** (-2)
-q = 1
+
 
 part_pos = np.random.uniform(0, Nx * dx, size=(Nx,))
 part_pos = np.linspace(0, (Np - 1) * Nx * dx / Np, Np)
@@ -30,11 +25,5 @@ plt.show()
 
 theta = np.linspace(0, 2*np.pi, len(phi))
 
-# plt.polar(theta, dens_avg)
-# plt.show()
 
 
-# plt.polar(theta, phi, label='Numerical solution')
-# plt.polar(theta, phi_theor, label='Theoretical solution')
-# plt.legend(loc='best')
-# plt.show()
