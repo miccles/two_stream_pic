@@ -132,8 +132,15 @@ def generate_init_cond(Nx, Np, v0, dv0, A):
     return pos_list, vel_list
 
 
-def leapfrog(pos, vel, acc, dt):
-    pass
+# Leapfrog algorithm #
+def leapfrog(part_pos, part_vel, acc, dt):
+    part_vel += acc * dt / 2 # (1/2) velocity kick
+    part_pos += part_vel * dt # particle drift
+    part_pos = periodic_bc(part_pos, Lx) # apply periodic boundary conditions
+    acc = find_acc(part_pos, Nx, dx, q, m) # update acceleration
+    part_vel += acc * dt / 2 # second (1/2) velocity kick
+    return part_pos, part_vel, acc
+
 
 
 
