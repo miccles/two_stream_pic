@@ -105,6 +105,18 @@ def el_solver(G, phi, dx):
     return electric_field
 
 
+# Find particle acceleration #
+def find_acc(part_pos, Nx, dx, qp, mp):
+    Lap = laplacian_matrix(Nx) # Laplacian matrix
+    G = gradient_matrix(Nx) # Gradient matrix
+    dens_avg = rho_avg(dx, Nx, part_pos, qp) # Average charge density
+    d_matrix = - 4 * np.pi * dx ** 2 *dens_avg # RHS matrix
+    phi = phi_sparse_solver(Lap, d_matrix) # Solve for potential
+    E = el_solver(G, phi, dx) # Electric field
+    acc = qp * E / mp # Acceleration
+    return acc
+
+
 # apply periodic boundary conditions #
 def periodic_bc(pos, Lx):
     pos = np.mod(pos, Lx)
@@ -118,6 +130,11 @@ def generate_init_cond(Nx, Np, v0, dv0, A):
     vel_list[int(Np / 2):] *= -1 # half of the particles have negative velocity
     vel_list *= (1 + A * np.sin(2 * np.pi * pos_list / Nx)) # add perturbation
     return pos_list, vel_list
+
+
+def leapfrog(pos, vel, acc, dt):
+    pass
+
 
 
 
