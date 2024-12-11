@@ -93,7 +93,6 @@ def phi_tridiag_solver(d):
 
 
 # potential solver - sparse matrix solver for periodic boundary conditions #
-
 def phi_sparse_solver(L, d):
     phi = spla.spsolve(L, d)
     return phi
@@ -105,9 +104,19 @@ def el_solver(G, phi, dx):
     return electric_field
 
 
+# apply periodic boundary conditions #
 def periodic_bc(pos, Lx):
     pos = np.mod(pos, Lx)
     return pos
+
+
+# generate initial particle positions and velocities #
+def generate_init_cond(Nx, Np, v0, dv0, A):
+    pos_list = np.random.rand(Np, 1) * Nx # random positions (uniform distribution)
+    vel_list = dv0 * np.random.randn(Np, 1) + v0 # random velocities (normal distribution)
+    vel_list[int(Np / 2):] *= -1 # half of the particles have negative velocity
+    vel_list *= (1 + A * np.sin(2 * np.pi * pos_list / Nx)) # add perturbation
+    return pos_list, vel_list
 
 
 

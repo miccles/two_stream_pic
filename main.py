@@ -5,7 +5,8 @@ from parameters import *
 
 
 def main():
-    pass
+    Lap = laplacian_matrix(Nx)
+    G = gradient_matrix(Nx)
 
 
 

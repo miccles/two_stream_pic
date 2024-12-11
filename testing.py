@@ -7,11 +7,16 @@ from functions import *
 import timeit
 
 
+N = 1000
+boxsize = 50
+vb = 1
+vth = 0.1
+A = 0.01
 
 
+pos, vel = generate_init_cond(boxsize, Np, vb, vth, A)
 
-box_size = 10
 
-pos = [-1, 2, 4, 8, 9, 11, 14, 18]
+plt.scatter(pos, vel)
+plt.show()
 
-print(np.mod(pos, box_size))

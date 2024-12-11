@@ -16,6 +16,7 @@ Np = Nx * ppc0  # Number of computational particles
 c = 1
 eta = 0.1     # number < 1 that is used for dt
 dt = eta * dx / c  # Simulation timestep
+timesteps = 100  # Number of timesteps
 
 # Spatial resolution #
 kappa = 2     # number > eta/2 that is used for c_omp
@@ -27,6 +28,18 @@ n0 = Np / Lx  # Plasma number density
 omega_p = c / c_omp    # Plasma frequency
 q = omega_p ** 2 / (4 * np.pi * n0 * q_m)  # Particle charge
 m = q / q_m                                # Particle mass
+
+# Beam parameters #
+beam_v0 = 0.5 * c  # Beam velocity
+beam_dv0 = 0.2 * beam_v0  # Beam velocity spread (thermal component)
+beam_perp = 0.01  # Beam perturbation amplitude
+
+
+
+
+
+
+
 
 
 
