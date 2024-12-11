@@ -4,19 +4,14 @@ import scipy.sparse as sp
 import scipy.sparse.linalg as spla
 
 from functions import *
+import timeit
 
 
 
-xvalues = np.linspace(0, 1, 3)
 
-phi_values = xvalues * (1 - xvalues)
 
-random_matrix = np.random.randint(0, 11, size=(3, 3))
+box_size = 10
 
-print(random_matrix)
+pos = [-1, 2, 4, 8, 9, 11, 14, 18]
 
-print(phi_values)
-
-print(random_matrix.dot(phi_values))
-print(np.dot(random_matrix, phi_values))
-print(random_matrix @ phi_values)
+print(np.mod(pos, box_size))

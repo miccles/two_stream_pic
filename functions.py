@@ -29,6 +29,7 @@ def rho_avg(dx, Nx, part_pos, qp):
     Lx = Nx * dx
     dens_avg = [0] * Nx
     cell_pos = [grid_pos(i, dx) for i in range(Nx)]
+    print(cell_pos)
     for i in range(len(cell_pos)):
         for p in range(len(part_pos)):
                 p_pos = part_pos[p]
@@ -102,6 +103,11 @@ def phi_sparse_solver(L, d):
 def el_solver(G, phi, dx):
     electric_field = -G.dot(phi) / (2 * dx)
     return electric_field
+
+
+def periodic_bc(pos, Lx):
+    pos = np.mod(pos, Lx)
+    return pos
 
 
 
