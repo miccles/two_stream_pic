@@ -21,7 +21,6 @@ dt = eta * dx / c  # Simulation timestep
 kappa = 2     # number > eta/2 that is used for c_omp
 c_omp = kappa * dx    # Plasma skin depth in dx units
 
-
 # Plasma parameters #
 q_m = 1       # Charge to mass ratio
 n0 = Np / Lx  # Plasma number density
