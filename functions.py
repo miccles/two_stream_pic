@@ -12,6 +12,7 @@ def b0(x):
     else:
         return 0
 
+
 # b1 spline function #
 def b1(x):
     if np.abs(x) <= 1:
@@ -19,6 +20,7 @@ def b1(x):
     else:
         return 0
     
+
 # cell center positions #
 def grid_pos(i, dx):
     return (i + 1 / 2) * dx
@@ -39,7 +41,6 @@ def rho_avg(dx, Nx, part_pos, qp):
                     dens_avg[i] += qp * b1((cell_pos[i] - (p_pos + Lx)) / dx)
                 dens_avg[i] += qp * b1((cell_pos[i] - p_pos) / dx)
     return dens_avg
-
 
 
 def laplacian_matrix(Nx):
