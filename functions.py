@@ -30,15 +30,15 @@ def grid_pos(i, dx):
 def rho_avg(dx, Nx, part_pos, qp):
     Lx = Nx * dx
     dens_avg = [0] * Nx
-    cell_pos = [grid_pos(i, dx) for i in range(Nx)]
-    for i in range(len(cell_pos)):
+    cell_pos_list = [grid_pos(i, dx) for i in range(Nx)]
+    for i in range(len(cell_pos_list)):
         for p in range(len(part_pos)):
                 p_pos = part_pos[p]
-                if i == 0 and part_pos[p] >= cell_pos[Nx - 1]:
-                    dens_avg[i] += qp * b1((cell_pos[i] - (p_pos - Lx)) / dx)
-                if i == Nx - 1 and part_pos[p] <= cell_pos[0]:
-                    dens_avg[i] += qp * b1((cell_pos[i] - (p_pos + Lx)) / dx)
-                dens_avg[i] += qp * b1((cell_pos[i] - p_pos) / dx)
+                if i == 0 and part_pos[p] >= cell_pos_list[Nx - 1]:
+                    dens_avg[i] += qp * b1((cell_pos_list[i] - (p_pos - Lx)) / dx)
+                if i == Nx - 1 and part_pos[p] <= cell_pos_list[0]:
+                    dens_avg[i] += qp * b1((cell_pos_list[i] - (p_pos + Lx)) / dx)
+                dens_avg[i] += qp * b1((cell_pos_list[i] - p_pos) / dx)
     return np.array(dens_avg)
 
 
@@ -104,6 +104,22 @@ def el_solver(G, phi, dx):
     return electric_field
 
 
+def el_particles(dx, Nx, part_pos, el_cells):
+    Lx = Nx * dx
+    el = [0] * len(part_pos)
+    cell_pos_list = [grid_pos(i, dx) for i in range(Nx)]
+    for p in range(len(part_pos)):
+        p_pos = part_pos[p]
+        for i in range(len(cell_pos_list)):
+            cell_pos = cell_pos_list[i]
+            if i == 0 and part_pos[p] >= cell_pos_list[Nx - 1]:
+                el[p] += el_cells[i] * b1((cell_pos - (p_pos - Lx)) / dx)
+            if i == Nx - 1 and part_pos[p] <= cell_pos_list[0]:
+                el[p] += el_cells[i] * b1((cell_pos - (p_pos + Lx)) / dx)
+            el[p] += el_cells[i] * b1((cell_pos - p_pos) / dx)
+    return np.array(el)
+            
+        
 # Find particle acceleration #
 def find_acc(part_pos, Nx, dx, qp, mp):
     Lap = laplacian_matrix(Nx) # Laplacian matrix
@@ -111,8 +127,10 @@ def find_acc(part_pos, Nx, dx, qp, mp):
     dens_avg = rho_avg(dx, Nx, part_pos, qp) # Average charge density
     d_matrix = - 4 * np.pi * dx ** 2 *dens_avg # RHS matrix
     phi = phi_sparse_solver(Lap, d_matrix) # Solve for potential
-    E = el_solver(G, phi, dx) # Electric field
-    acc = qp * E / mp # Acceleration
+    E_cells = el_solver(G, phi, dx) # Electric field of Cells
+    Ep = el_particles(dx, Nx, part_pos, E_cells) # Electric field of Particles
+    acc = qp * Ep / mp # Acceleration
+    print(acc.shape)
     return acc
 
 
@@ -133,6 +151,7 @@ def generate_init_cond(Nx, Np, v0, dv0, A):
 
 # Leapfrog algorithm #
 def leapfrog(part_pos, part_vel, acc, dt):
+    print(part_vel.shape)
     part_vel += acc * dt / 2 # (1/2) velocity kick
     part_pos += part_vel * dt # particle drift
     part_pos = periodic_bc(part_pos, Lx) # apply periodic boundary conditions
