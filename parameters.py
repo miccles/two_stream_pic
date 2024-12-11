@@ -5,7 +5,7 @@ import numpy as np
 
 # Domain parameters #
 Nx = 100      # Number of cells
-Lx = Nx       # Length of the domain
+Lx = 50       # Length of the domain
 dx = Lx / Nx  # Size of each cell
 
 # Particle parameters #
@@ -14,12 +14,12 @@ Np = Nx * ppc0  # Number of computational particles
 
 # Time resolution #
 c = 1
-eta = 0.1     # number < 1 that is used for dt
+eta = 0.01     # number < 1 that is used for dt
 dt = eta * dx / c  # Simulation timestep
 timesteps = 100  # Number of timesteps
 
 # Spatial resolution #
-kappa = 2     # number > eta/2 that is used for c_omp
+kappa = 4     # number > eta/2 that is used for c_omp
 c_omp = kappa * dx    # Plasma skin depth in dx units
 
 # Plasma parameters #
@@ -34,6 +34,26 @@ beam_v0 = 0.5 * c  # Beam velocity
 beam_dv0 = 0.2 * beam_v0  # Beam velocity spread (thermal component)
 beam_perp = 0.01  # Beam perturbation amplitude
 
+
+if __name__ == "__main__":
+    print('--- Simulation Parameters ---')
+    print(f'Number of cells: {Nx}')
+    print(f'Length of the domain: {Lx}')
+    print(f'Size of each cell: {dx}')
+    print(f'Number of particles per cell: {ppc0}')
+    print(f'Number of computational particles: {Np}')
+    print(f'Simulation timestep: {dt}')
+    print(f'Number of timesteps: {timesteps}')
+    print(f'Plasma skin depth in cell units: {c_omp}')
+    print(f'Plasma number density: {n0}')
+    print(f'Plasma frequency: {omega_p}')
+    print(f'Particle charge: {q}')
+    print(f'Particle mass: {m}')
+    print(f'Beam velocity: {beam_v0}')
+    print(f'Beam velocity spread: {beam_dv0}')
+    print(f'Beam perturbation amplitude: {beam_perp}')
+    print(f'Charge to mass ratio: {q_m}')
+    print('----------------------------')
 
 
 

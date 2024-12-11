@@ -130,7 +130,6 @@ def find_acc(part_pos, Nx, dx, qp, mp):
     E_cells = el_solver(G, phi, dx) # Electric field of Cells
     Ep = el_particles(dx, Nx, part_pos, E_cells) # Electric field of Particles
     acc = qp * Ep / mp # Acceleration
-    print(acc.shape)
     return acc
 
 
@@ -151,7 +150,6 @@ def generate_init_cond(Nx, Np, v0, dv0, A):
 
 # Leapfrog algorithm #
 def leapfrog(part_pos, part_vel, acc, dt):
-    print(part_vel.shape)
     part_vel += acc * dt / 2 # (1/2) velocity kick
     part_pos += part_vel * dt # particle drift
     part_pos = periodic_bc(part_pos, Lx) # apply periodic boundary conditions
