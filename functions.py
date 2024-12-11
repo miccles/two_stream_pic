@@ -31,7 +31,6 @@ def rho_avg(dx, Nx, part_pos, qp):
     Lx = Nx * dx
     dens_avg = [0] * Nx
     cell_pos = [grid_pos(i, dx) for i in range(Nx)]
-    print(cell_pos)
     for i in range(len(cell_pos)):
         for p in range(len(part_pos)):
                 p_pos = part_pos[p]
@@ -40,7 +39,7 @@ def rho_avg(dx, Nx, part_pos, qp):
                 if i == Nx - 1 and part_pos[p] <= cell_pos[0]:
                     dens_avg[i] += qp * b1((cell_pos[i] - (p_pos + Lx)) / dx)
                 dens_avg[i] += qp * b1((cell_pos[i] - p_pos) / dx)
-    return dens_avg
+    return np.array(dens_avg)
 
 
 def laplacian_matrix(Nx):
