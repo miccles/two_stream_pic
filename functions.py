@@ -121,11 +121,11 @@ def el_particles(dx, Nx, part_pos, el_cells):
             
         
 # Find particle acceleration #
-def find_acc(part_pos, Nx, dx, qp, mp):
+def find_acc(part_pos, Nx, dx, qp, mp, n0):
     Lap = laplacian_matrix(Nx) # Laplacian matrix
     G = gradient_matrix(Nx) # Gradient matrix
     dens_avg = rho_avg(dx, Nx, part_pos, qp) # Average charge density
-    d_matrix = - 4 * np.pi * dx ** 2 *dens_avg # RHS matrix
+    d_matrix = - 4 * np.pi * dx ** 2 * (dens_avg - n0) # RHS matrix
     phi = phi_sparse_solver(Lap, d_matrix) # Solve for potential
     E_cells = el_solver(G, phi, dx) # Electric field of Cells
     Ep = el_particles(dx, Nx, part_pos, E_cells) # Electric field of Particles
@@ -141,6 +141,7 @@ def periodic_bc(pos, Lx):
 
 # generate initial particle positions and velocities #
 def generate_init_cond(Nx, Np, v0, dv0, A):
+    np.random.seed(1234)
     pos_list = np.random.rand(Np, 1) * Nx # random positions (uniform distribution)
     vel_list = dv0 * np.random.randn(Np, 1) + v0 # random velocities (normal distribution)
     vel_list[int(Np / 2):] *= -1 # half of the particles have negative velocity
@@ -149,11 +150,11 @@ def generate_init_cond(Nx, Np, v0, dv0, A):
 
 
 # Leapfrog algorithm #
-def leapfrog(part_pos, part_vel, acc, dt):
+def leapfrog(part_pos, part_vel, acc, dt, n0):
     part_vel += acc * dt / 2 # (1/2) velocity kick
     part_pos += part_vel * dt # particle drift
     part_pos = periodic_bc(part_pos, Lx) # apply periodic boundary conditions
-    acc = find_acc(part_pos, Nx, dx, q, m) # update acceleration
+    acc = find_acc(part_pos, Nx, dx, q, m, n0) # update acceleration
     part_vel += acc * dt / 2 # second (1/2) velocity kick
     return part_pos, part_vel, acc
 

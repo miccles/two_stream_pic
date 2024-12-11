@@ -5,7 +5,7 @@ import numpy as np
 
 # Domain parameters #
 Nx = 100      # Number of cells
-Lx = 50       # Length of the domain
+Lx = Nx       # Length of the domain      
 dx = Lx / Nx  # Size of each cell
 
 # Particle parameters #

@@ -8,7 +8,7 @@ def main():
     pos, vel = generate_init_cond(Lx, Np, beam_v0, beam_dv0, beam_perp)
 
     # Calculate initial acceleration
-    acc = find_acc(pos, Nx, dx, q, m)
+    acc = find_acc(pos, Nx, dx, q, m, n0)
 
     # Set up the plot
     fig, ax = plt.subplots(figsize=(8, 6))
@@ -23,7 +23,7 @@ def main():
 
     # Simulation loop
     for i in range(timesteps):
-        pos, vel, acc = leapfrog(pos, vel, acc, dt)
+        pos, vel, acc = leapfrog(pos, vel, acc, dt, n0)
         pop1_pos, pop1_vel = pos[:int(Np/2)], vel[:int(Np/2)]
         pop2_pos, pop2_vel = pos[int(Np/2):], vel[int(Np/2):]
 
