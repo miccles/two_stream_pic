@@ -6,6 +6,7 @@ from parameters import *
 
 def main():
     # Generate initial conditions
+    print('Generating initial conditions...')
     pos, vel = generate_init_cond(Lx, Np, beam_v0, beam_dv0, beam_perp)
     # Calculate initial acceleration
     dens, phi, el, acc = find_acc(pos, Nx, dx, q, m, n0)
@@ -52,6 +53,7 @@ def main():
 
     # Simulation loop
     for i in range(timesteps):
+        print(f'Step {i+1} out of {timesteps}...')
         pos, vel, dens, phi, el, acc = leapfrog(pos, vel, acc, dt, n0)
         pop1_pos, pop1_vel = pos[:int(Np/2)], vel[:int(Np/2)]
         pop2_pos, pop2_vel = pos[int(Np/2):], vel[int(Np/2):]
