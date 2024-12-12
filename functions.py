@@ -125,7 +125,7 @@ def find_acc(part_pos, Nx, dx, qp, mp, n0):
     Lap = laplacian_matrix(Nx) # Laplacian matrix
     G = gradient_matrix(Nx) # Gradient matrix
     dens_avg = rho_avg(dx, Nx, part_pos, qp) # Average charge density
-    d_matrix = - 4 * np.pi * dx ** 2 * (dens_avg - n0) # RHS matrix
+    d_matrix = - 4 * np.pi * dx ** 2 * (dens_avg -  q * n0) # RHS matrix
     phi = phi_sparse_solver(Lap, d_matrix) # Solve for potential
     E_cells = el_solver(G, phi, dx) # Electric field of Cells
     Ep = el_particles(dx, Nx, part_pos, E_cells) # Electric field of Particles
