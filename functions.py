@@ -95,6 +95,7 @@ def phi_tridiag_solver(d):
 # potential solver - sparse matrix solver for periodic boundary conditions #
 def phi_sparse_solver(L, d):
     phi = spla.spsolve(L, d)
+    phi -= phi[0]
     return phi
 
 

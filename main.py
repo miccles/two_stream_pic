@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import imageio
 from functions import *
 from parameters import *
 
@@ -83,7 +84,10 @@ def main():
         plt.show()
     else:
         # Create a movie from the saved frames
-        os.system('ffmpeg -r 10 -i plots/frame_%04d.png -vcodec libx264 -y movie.mp4')
+        with imageio.get_writer('movie.mp4', fps=8) as writer:
+            for i in range(timesteps):
+                image = imageio.imread(f'plots/frame_{i:04d}.png')
+                writer.append_data(image)
 
 if __name__ == "__main__":
     main()
