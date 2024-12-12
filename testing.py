@@ -1,69 +1,58 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy.sparse as sp
-import scipy.sparse.linalg as spla
 
-from functions import *
-import timeit
-
-
-Lap = laplacian_matrix(Nx) # Laplacian matrix
-G = gradient_matrix(Nx) # Gradient matrix
+def disp(om_t, a, b, om_c):
+    return 1 / (om_t - a) ** 2 + 1 / (om_c * (om_t - a * b)) ** 2
 
 
 
-# Generate initial conditions
-pos, vel = generate_init_cond(Lx, Np, beam_v0, beam_dv0, beam_perp)
+a = 1
+b = -0.5
+om_c = 12
 
-# Calculate average charge density
-dens_avg = rho_avg(dx, Nx, pos, q)
+instability_criterion = a * np.abs(b - 1) < (1 + om_c ** (2 / 3)) ** (3 / 2) / om_c
 
-# Calculate RHS matrix
-d_matrix = -4 * np.pi * dx ** 2 * (dens_avg - q * n0)
+# om_t = np.linspace(-2, 2.5, 1000)
 
-# Solve for potential
-phi = phi_sparse_solver(Lap, d_matrix)
+# plt.plot(om_t, disp(om_t, a, b, om_c), label=r'$f(\tilde{\omega})$')
+# plt.vlines(a, 0, 100, color='red', linestyle='--', label=r'$\tilde{\omega}=\alpha$')
+# plt.vlines(a * b, 0, 100, color='blue', linestyle='--', label=r'$\tilde{\omega}=\alpha\cdot\beta$')
+# plt.hlines(1, -2, 2.5, color='black')
+# plt.ylim(0, 10)
+# plt.xlabel(r'$\tilde{\omega}$')
+# plt.ylabel(r'$f(\tilde{\omega})$')
+# plt.title(fr'Dispersion relation: $\alpha={a}$, $\beta={b}$, $\Omega={om_c}$')
+# plt.legend()
 
-# Calculate electric field of cells
-E_cells = el_solver(G, phi, dx)
+# # Add text box
+# stability_text = "System: stable" if not instability_criterion else "System: unstable"
+# plt.text(0.05, 0.95, stability_text, transform=plt.gca().transAxes, fontsize=12,
+#          verticalalignment='top', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
 
-# Calculate electric field of particles
-Ep = el_particles(dx, Nx, pos, E_cells)
+# plt.show()
 
-# Calculate acceleration
-acc = q * Ep / m
+# Define the complex function
+def complex_function(x):
+    return np.exp(1j * x)  # Example: e^(ix)
 
-# Create a 4-pane plot
-fig, axs = plt.subplots(2, 2, figsize=(12, 10))
+# Generate input values
+x = np.linspace(0, 2 * np.pi, 500)  # Values from 0 to 2π
 
-# Top left: pos, vel scatter
-axs[0, 0].scatter(pos, vel, s=2, color='blue', alpha=0.5)
-axs[0, 0].set_title('Phase Diagram')
-axs[0, 0].set_xlabel('Position')
-axs[0, 0].set_ylabel('Velocity')
+# Evaluate the function
+y = complex_function(x)
 
-# Top right: dens_avg plot
-axs[0, 1].plot(np.linspace(0, Nx*dx, Nx), dens_avg - n0 * q, color='green')
-axs[0, 1].axhline(y=np.mean(dens_avg - q * n0), color='red', linestyle='--')
-axs[0, 1].set_title('Average Charge Density')
-axs[0, 1].set_xlabel('Position')
-axs[0, 1].set_ylabel('Density')
+# Extract real and imaginary parts
+y_real = np.real(y)
+y_imag = np.imag(y)
 
-
-# Bottom left: phi plot
-axs[1, 0].plot(np.linspace(0, Nx*dx, Nx), phi, color='red')
-axs[1, 0].set_title('Potential (phi)')
-axs[1, 0].set_xlabel('Position')
-axs[1, 0].set_ylabel('Potential')
-
-# Bottom right: E_cells plot
-axs[1, 1].plot(np.linspace(0, Nx*dx, Nx), E_cells, color='purple')
-axs[1, 1].set_title('Electric Field of Cells')
-axs[1, 1].set_xlabel('Position')
-axs[1, 1].set_ylabel('Electric Field')
-
-# Adjust layout
-plt.tight_layout()
+# Plot the real and imaginary parts
+plt.figure(figsize=(8, 6))
+plt.plot(x, y_real, label="Real Part", color="blue")
+plt.plot(x, y_imag, label="Imaginary Part", color="orange")
+plt.axhline(0, color="black", linewidth=0.8, linestyle="--")
+plt.title("Real and Imaginary Parts of a Complex Function")
+plt.xlabel("x")
+plt.ylabel("Function Value")
+plt.legend()
+plt.grid(True)
 plt.show()
-
-
