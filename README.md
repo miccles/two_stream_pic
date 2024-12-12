@@ -1,2 +1,2 @@
 # my_pic
-PIC code for two-stream instability
+1D PIC code to study the two-stream instability
