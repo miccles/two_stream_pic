@@ -14,7 +14,7 @@ Np = Nx * ppc0  # Number of computational particles
 
 # Time resolution #
 c = 1
-eta = 0.01     # number < 1 that is used for dt
+eta = 0.5     # number < 1 that is used for dt
 dt = eta * dx / c  # Simulation timestep
 timesteps = 100  # Number of timesteps
 

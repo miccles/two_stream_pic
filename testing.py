@@ -34,7 +34,7 @@ Ep = el_particles(dx, Nx, pos, E_cells)
 acc = q * Ep / m
 
 # Create a 4-pane plot
-fig, axs = plt.subplots(2, 3, figsize=(18, 10))
+fig, axs = plt.subplots(2, 2, figsize=(12, 10))
 
 # Top left: pos, vel scatter
 axs[0, 0].scatter(pos, vel, s=2, color='blue', alpha=0.5)
@@ -43,18 +43,12 @@ axs[0, 0].set_xlabel('Position')
 axs[0, 0].set_ylabel('Velocity')
 
 # Top right: dens_avg plot
-axs[0, 1].plot(np.linspace(0, Nx*dx, Nx), dens_avg, color='green')
-axs[0, 1].axhline(y=np.mean(dens_avg), color='red', linestyle='--')
+axs[0, 1].plot(np.linspace(0, Nx*dx, Nx), dens_avg - n0 * q, color='green')
+axs[0, 1].axhline(y=np.mean(dens_avg - q * n0), color='red', linestyle='--')
 axs[0, 1].set_title('Average Charge Density')
 axs[0, 1].set_xlabel('Position')
 axs[0, 1].set_ylabel('Density')
 
-
-axs[0, 2].plot(np.linspace(0, Nx*dx, Nx), dens_avg - n0 * q, color='green')
-axs[0, 2].axhline(y=np.mean(dens_avg - n0 * q), color='red', linestyle='--')
-axs[0, 2].set_title('Average Charge Density')
-axs[0, 2].set_xlabel('Position')
-axs[0, 2].set_ylabel('Density')
 
 # Bottom left: phi plot
 axs[1, 0].plot(np.linspace(0, Nx*dx, Nx), phi, color='red')
