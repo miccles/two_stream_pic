@@ -31,8 +31,8 @@ m = q / q_m                                # Particle mass
 
 # Beam parameters #
 beam_v0 = 0.5 * c  # Beam velocity
-beam_dv0 = 0.2 * beam_v0  # Beam velocity spread (thermal component)
-beam_perp = 0.001  # Beam perturbation amplitude
+beam_dv0 = 0.05 * beam_v0  # Beam velocity spread (thermal component)
+beam_perp = 0  # Beam perturbation amplitude
 
 
 # Plotting parameters #
