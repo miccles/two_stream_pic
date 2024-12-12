@@ -154,9 +154,9 @@ def leapfrog(part_pos, part_vel, acc, dt, n0):
     part_vel += acc * dt / 2 # (1/2) velocity kick
     part_pos += part_vel * dt # particle drift
     part_pos = periodic_bc(part_pos, Lx) # apply periodic boundary conditions
-    _, _, _, acc = find_acc(part_pos, Nx, dx, q, m, n0) # update acceleration
+    dens, phi, el, acc = find_acc(part_pos, Nx, dx, q, m, n0) # update acceleration
     part_vel += acc * dt / 2 # second (1/2) velocity kick
-    return part_pos, part_vel, acc
+    return part_pos, part_vel, dens, phi, el, acc
 
 
 

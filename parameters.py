@@ -9,7 +9,7 @@ Lx = Nx       # Length of the domain
 dx = Lx / Nx  # Size of each cell
 
 # Particle parameters #
-ppc0 = 5      # Number of particles per cell
+ppc0 = 10      # Number of particles per cell
 Np = Nx * ppc0  # Number of computational particles
 
 # Time resolution #
