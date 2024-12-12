@@ -35,6 +35,10 @@ beam_dv0 = 0.2 * beam_v0  # Beam velocity spread (thermal component)
 beam_perp = 0.001  # Beam perturbation amplitude
 
 
+# Plotting parameters #
+real_time = False  # Real-time plotting
+
+
 if __name__ == "__main__":
     print('--- Simulation Parameters ---')
     print(f'Number of cells: {Nx}')

@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from functions import *
@@ -39,8 +40,15 @@ def main():
     axs[1, 1].set_ylabel('Electric Field')
     
     plt.tight_layout()
-    plt.ion()
-    plt.show()
+    
+    if real_time:
+        plt.ion()
+        plt.show()
+
+    # Directory to save plots if real_time is False
+    if not real_time:
+        if not os.path.exists('plots'):
+            os.makedirs('plots')
 
     # Simulation loop
     for i in range(timesteps):
@@ -62,12 +70,18 @@ def main():
         # Update E_cells plot data
         E_cells_line.set_ydata(el)
         
-        plt.pause(0.001)
+        if real_time:
+            plt.pause(0.001)
+        else:
+            plt.savefig(f'plots/frame_{i:04d}.png')
 
-    # Save the final plot
-    plt.ioff()
-    plt.savefig('pic.png', dpi=240)
-    plt.show()
+    if real_time:
+        plt.ioff()
+        plt.savefig('pic.png', dpi=240)
+        plt.show()
+    else:
+        # Create a movie from the saved frames
+        os.system('ffmpeg -r 10 -i plots/frame_%04d.png -vcodec libx264 -y movie.mp4')
 
 if __name__ == "__main__":
     main()
