@@ -8,7 +8,7 @@ def main():
     pos, vel = generate_init_cond(Lx, Np, beam_v0, beam_dv0, beam_perp)
 
     # Calculate initial acceleration
-    acc = find_acc(pos, Nx, dx, q, m, n0)
+    dens, phi, el, acc  = find_acc(pos, Nx, dx, q, m, n0)
 
     # Set up the plot
     fig, ax = plt.subplots(figsize=(8, 6))
